@@ -1,0 +1,100 @@
+﻿
+      * {
+                 -ms-user-select: none;
+                 -webkit-touch-callout: none;
+                 -webkit-tap-highlight-color: rgba(0,0,0,0);
+                 -webkit-user-select: none;
+                 -moz-user-select: none;
+                 -ms-user-select: none;
+             }
+
+             html, body {
+ 
+             }
+
+             body, div {
+                 margin: 0 0 0 0;
+                 padding: 0 0 0 0;
+             }
+
+             body {
+			  background-color: #444444;
+                 xbackground-color: #A5CBFF;
+				  
+				    -moz-user-select: -moz-none;
+                 -khtml-user-select: none;
+                 -webkit-user-select: none;
+                 /*
+          Introduced in IE 10.
+          See http://ie.microsoft.com/testdrive/HTML5/msUserSelect/
+        */
+                 -ms-user-select: none;
+                 user-select: none;
+                 -ms-touch-action: none;
+
+
+             }
+
+             #msgModelWindow {
+                 width: 480px;
+                 xheight: 100%;
+                 background-image: url(overlay.png);
+                 position: absolute;
+                 text-align: center;
+             }
+
+             #msgModelWindowInner {
+                 border-radius: 6px;
+                 -moz-border-radius: 6px;
+                 -webkit-border-radius: 6px;
+                 background-color: White;
+                 margin: 100px auto 3px auto;
+                 padding: 10px 20px 0px 20px;
+                 width: 200px;
+                 border: 1px solid black;
+             }
+
+                 #msgModelWindowInner h1, h2, h3, h4 {
+                     /*text-shadow: 1px 1px 2px #333;*/
+                 }
+
+             #wraper {
+                 width: 480px;
+                 xheight: 700px;
+                 xmargin: 0px auto;
+                 padding: 0 0 0 0;
+             }
+
+             #gameCanvas {
+                 xwidth: 100%;
+                 xheight: 100%;
+                 position: absolute;
+                 xborder: 1px solid black;
+             }
+
+             #dragicons {
+                 xwidth: 480px;
+                 xheight: 50px;
+                 position: absolute;
+             }
+
+                 #dragicons canvas {
+                     cursor: pointer;
+                     -ms-touch-action: none;
+                 }
+
+             #btnSound {
+                 right: 0px;
+                 position: absolute;
+                 height: 30px;
+                 width: 30px;
+             }
+
+             #fpscounter {
+                 right: 30px;
+                 position: absolute;
+             }
+
+             a, input, div {
+                 -ms-touch-action: none !important;
+             }
