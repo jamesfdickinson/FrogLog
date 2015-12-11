@@ -1,4 +1,5 @@
 ﻿var balls;
+var inventory = [];
 var levels;
 var ctx;
 var height = 800;
@@ -7,6 +8,7 @@ var currentLevel = new Level();
 var waterWave = 0;
 var waterWaveD = 1;
 var setIntervalId;
+
 var currentLevelNumber = 0;
 var imgLog = new Image();
 imgLog.src = 'images/log.png';
@@ -91,7 +93,8 @@ function Level(st, r, gf, rf, bf, yf, log, music) {
             clearTimeout(id);
         };
 }());
-
+var scale = 1;
+var offset = null;
 function init() {
     currentLevelNumber = 0;
     dragIconsDiv = document.getElementById('dragicons');
@@ -100,6 +103,87 @@ function init() {
     gameCanvas.onmousedown = function (e) {
         gameClick(this, e);
     };
+    // Add eventlistener to canvas
+    //gameCanvas.addEventListener('touchmove', function () {
+    //    //Assume only one touch/only process one touch even if there's more
+    //    var touch = event.targetTouches[0];
+
+    //    //// Is touch close enough to our object?
+    //    //if (detectHit(obj.x, obj.y, touch.pageX, touch.pageY, obj.w, obj.h)) {
+    //    //    // Assign new coordinates to our object
+    //    //    obj.x = touch.pageX;
+    //    //    obj.y = touch.pageY;
+
+    //    //    // Redraw the canvas
+    //    //    draw();
+    //    //}
+    //    event.preventDefault();
+    //}, false);
+
+
+    $(document).bind('touchstart mousedown', function (e) {
+        var canvas = document.getElementById("gameCanvas");
+        scale = canvas.clientWidth / canvas.width;
+        offset = $('#gameCanvas').offset();
+
+        var currentX = ((e.originalEvent.touches ? e.originalEvent.touches[0].clientX : e.clientX) - offset.left) / scale;
+        var currentY = ((e.originalEvent.touches ? e.originalEvent.touches[0].clientY : e.clientY) - offset.top) / scale;
+
+        //if showing instuction remove them
+        //todo:code it
+
+        //check if item found to drag
+        //todo:find hit col
+        selectedIcon = null;
+        for (i in balls) {
+            if (currentX < balls[i].x - balls[i].s) continue;
+            if (currentX > balls[i].x - balls[i].s + balls[i].img.width) continue;
+            if (currentY < balls[i].y - balls[i].s) continue;
+            if (currentY > balls[i].y - balls[i].s + balls[i].img.height) continue;
+
+            selectedIcon = balls[i];
+           // break;
+        }
+        for (i in inventory) {
+            if (currentX < inventory[i].x - inventory[i].s) continue;
+            if (currentX > inventory[i].x - inventory[i].s + inventory[i].img.width) continue;
+            if (currentY < inventory[i].y - inventory[i].s) continue;
+            if (currentY > inventory[i].y - inventory[i].s + inventory[i].img.height) continue;
+
+            selectedIcon = inventory[i];
+            //break;
+        }
+        if (selectedIcon != null) {
+        }
+
+        
+    });
+    $(document).bind('touchmove mousemove', function (e) {
+        
+        var currentX = ((e.originalEvent.touches ? e.originalEvent.touches[0].clientX : e.clientX) - offset.left) / scale;
+        var currentY = ((e.originalEvent.touches ? e.originalEvent.touches[0].clientY : e.clientY) - offset.top) / scale;
+
+
+        //drag
+        if (selectedIcon != null) {
+            selectedIcon.x = currentX;
+            selectedIcon.y = currentY;
+        }
+    });
+    $(document).bind('touchend  mouseup', function (e) {
+
+       //drop
+        if (selectedIcon != null) {
+            //remove from inventory
+            var i = inventory.indexOf(selectedIcon);
+            if (i > -1) {
+                inventory.splice(i, 1);
+            }
+            placeItem(selectedIcon.id, selectedIcon.x, selectedIcon.y);
+            selectedIcon = null;
+        }
+        checkForEndLevel();
+    });
     ctx = document.getElementById('gameCanvas').getContext('2d');
     ctx.globalCompositeOperation = 'source-over';
 
@@ -123,7 +207,7 @@ function init() {
     levels = new Array();
     levels.push(new Level("<h3>Level 1</h3><p>Hello Froggie!</p><p><small>Hint: Drag the log first</small></p>", 2, 2, 0, 0, 0, 1, "music/FrogBuzz.mp3"));
     levels.push(new Level("<h3>Level 2</h3><p>Make room for all!</p>", 12, 15, 0, 0, 0, 1, "music/facelines.mp3"));
-    levels.push(new Level("<h3>Level 3</h3><p>Big Blue</p><p><small>Hint: Blue frogs are heavy</small></p>", 6, 3, 0, 3, 0, 1, "music/FrogBuzz.mp3"));
+    levels.push(new Level("<h3>Level 3</h3><p>Big Blue</p><p><small>Hint: Blue frogs are heavy</small></p>", 6, 2, 0, 3, 0, 1, "music/FrogBuzz.mp3"));
     levels.push(new Level("<h3>Level 4</h3><p>Ninja Pop Corn!</p><p><small>Hint: You will see why</small></p>", 7, 0, 9, 0, 0, 1, "music/facelines.mp3"));
     levels.push(new Level("<h3>Level 5</h3><p>Logs!</p><p><small>Hint: Try making a frog sandwitch</small></p>", 14, 15, 0, 1, 0, 4, "music/FrogBuzz.mp3"));
     levels.push(new Level("<h3>Level 6</h3><p>Meet Sticky!</p><p><small>Hint: Other frogs and even logs will stick to the yellow frog</small></p>", 27, 25, 0, 0, 4, 2, "music/facelines.mp3"));
@@ -147,7 +231,7 @@ function init() {
             isSoundOn = false;
         }
         //save audio setting
-         localStorage.setItem("isSoundOn", isSoundOn);
+         localStorage.isSoundOn=isSoundOn;
     };
 
     $(document).bind('pageshow', function (event, data) {
@@ -311,6 +395,8 @@ function drop(target, e) {
     placeItem(id, x, y);
     e.preventDefault();
 }
+
+var levelEndTimer;
 function placeItem(id, x, y) {
     if (id == "greenFrogIcon") {
         currentLevel.greenFrogCount -= 1;
@@ -336,17 +422,22 @@ function placeItem(id, x, y) {
 
 
 
-    updateInventory();
+    //updateInventory();
 
+    checkForEndLevel();
+   
+}
+function checkForEndLevel() {
     //check if level is over
+    clearTimeout(levelEndTimer);
     if (currentLevel != null) {
         if (currentLevel.remaining() == 0) {
             //start timer
-            setTimeout(endLevel, 5000);
+            
+            levelEndTimer = setTimeout(endLevel, 4000);
         }
     }
 }
-
 
 function endLevel() {
     var count = 0;
@@ -374,11 +465,14 @@ function endLevel() {
 }
 
 function showMessage(msg, callback) {
+   
+
     document.getElementById('msgModelMessage').innerHTML = msg;
     document.getElementById('msgModelWindow').style.display = 'block';
-    document.getElementById('msgModelWindow').onclick = function () {
-        callback();
-    };;
+    document.getElementById('msgModelWindow').onmousedown = function () {
+            callback();
+    };
+    
 }
 
 
@@ -556,16 +650,16 @@ function pullTogetherSticky() {
     }
 }
 function gameClick(sender, e) {
-    var x = e.layerX;
-    var y = e.layerY;
-    if (selectedIcon != null) {
-        //drop
-        placeItem(selectedIcon.id, x, y);
-        //unselect
-        updateInventory();
-        selectedIcon = null;
+    //var x = e.layerX;
+    //var y = e.layerY;
+    //if (selectedIcon != null) {
+    //    //drop
+    //    placeItem(selectedIcon.id, x, y);
+    //    //unselect
+    //    updateInventory();
+    //    selectedIcon = null;
 
-    }
+    //}
 
 }
 function iconClick(sender, e) {
@@ -579,9 +673,6 @@ function iconClick(sender, e) {
 
     selectedIcon = sender;
     selectedIcon.style.backgroundColor = "#888888";
-
-
-
 }
 function allowDrop(ev) {
     ev.preventDefault();
@@ -605,143 +696,61 @@ var click = {
     y: 0,
     scale: 1
 };
-function addIcon(id, img, n) {
-    var newCanvas = document.createElement('canvas');
-    newCanvas.id = id;
-    newCanvas.width = 110;
-    newCanvas.height = 80;
-    //newCanvas.draggable = true;
-    newCanvas.className = "draggable"
 
-    // newCanvas.ondragstart = function (e) {
-    //    drag(this, e);
-    //};
-    //  newCanvas.onclick = function (e) {
-    //      iconClick(this, e);
-    //  };
-
-    dragIconsDiv.appendChild(newCanvas);
-
-    var context = newCanvas.getContext('2d');
-
-    context.drawImage(img, 0, 0);
-    context.font = 'bold 13px sans-serif';
-    context.shadowOffsetX = 1;
-    context.shadowOffsetY = 1;
-    context.shadowBlur = 2;
-    context.shadowColor = 'rgba(0, 0, 0, 0.5)';
-    context.fillStyle = '#000000';
-    if (context.fillText != null)//firefox 3.0 bug
-        context.fillText("x" + n, 40, 45);
-
-    //http://stackoverflow.com/questions/13882070/jquery-draggable-and-webkit-transform-scale
-    $(".draggable").draggable({
-        // opacity: 0.7, helper: "clone",
-        start: function (event, ui) {
-            dragId = event.currentTarget.id;
-            click.x = event.clientX;
-            click.y = event.clientY;
-            var element = document.getElementById("gameCanvas");
-            click.scale = element.clientWidth /  element.width;
-        },
-        drag: function (event, ui) {
-            //// This is the parameter for scale()
-            //var zoom = click.scale;
-
-            //var original = ui.originalPosition;
-
-            //// jQuery will simply use the same object we alter here
-            //ui.position = {
-            //    left: (event.clientX - click.x + original.left) / zoom,
-            //    top: (event.clientY - click.y + original.top) / zoom
-            //};
-           
-        }
-        ,
-        stop: function (event, ui) {
-           
-            var id = event.currentTarget.id;
-            id = dragId;
-            var offset = $("#gameArea").offset();
-            var element = document.getElementById("gameArea");
-            var element2 = document.getElementById("gameCanvas");
-
-            var x = ui.position.left / click.scale;
-            var y = ui.position.top / click.scale;
-            placeItem(id, x, y);
-            return;
-
-            var x = ui.position.left * click.scale;
-            var y = ui.position.top * click.scale;
-            placeItem(id, x, y);
-
-            // var zoom = click.scale;
-            // var original = ui.originalPosition;
-
-            // jQuery will simply use the same object we alter here
-
-            // var x = (event.clientX - click.x + original.left) / zoom;
-            // var y = (event.clientY - click.y + original.top) / zoom;
-            var x = ((event.clientX - offset.left) / click.scale) -( event.offsetX-30 );
-            var y = ((event.clientY - offset.top) / click.scale) - (event.offsetY - 30);
-
-            placeItem(id, x , y );
-          return;
-
-
-
-            // var x = event.clientX;
-            // var y = event.clientY;
-
-            id = dragId;
-            //var x = event.pageX - ui.offset.left;
-            //var y = event.pageY - ui.offset.top;
-            //var x = event.pageX - $(this).offset().left;
-            //var y = event.pageY - $(this).offset().top;
-            //var x = ui.position.left - $('#gameCanvas').offset().left;
-            //var y = ui.position.top - $('#gameCanvas').offset().top;
-
-            //var x = ui.position.left + event.pageX;
-            //var y = ui.position.top + event.pageY;
-            //var x =  event.pageX;
-            //var y =  event.pageY;
-
-            //var x =  $(this).offset().left;
-            //var y = $(this).offset().top;
-
-            var x = ui.offset.left;
-            var y = ui.offset.top;
-            placeItem(id, x, y);
-            //  e.preventDefault();
-        }
-    });
-
-}
 var dragId = 0
 
 
 function updateInventory() {
 
-    // clear
-    while (dragIconsDiv.firstChild) dragIconsDiv.removeChild(dragIconsDiv.firstChild);
-    // dragicons.innerHTML = "";
+    inventory = [];
+    for (i = 0; i < currentLevel.logCount; i++) {
+        var inventoryItemLog = { id: "logIcon", type: "frog", x: 40, y: 50, s: 30, w: 1, vx: 0, vy: 0, img: logCanvas };
+        inventory.push(inventoryItemLog);
+    }
+    for (i = 0; i < currentLevel.greenFrogCount; i++) {
+        var inventoryItemFrog = { id: "greenFrogIcon", type: "frog", x: 120, y: 40, s: 30, w: 1, vx: 0, vy: 0, img: greenFrogCanvas };
+        inventory.push(inventoryItemFrog);
+    }
+    for (i = 0; i < currentLevel.yellowFrogCount; i++) {
+        var inventoryItemFrog = { id: "yellowFrogIcon", type: "frog", x: 240, y: 40, s: 30, w: 1, vx: 0, vy: 0, img: yellowFrogCanvas };
+        inventory.push(inventoryItemFrog);
+    }
+    for (i = 0; i < currentLevel.redFrogCount; i++) {
+        var inventoryItemFrog = { id: "redFrogIcon", type: "frog", x: 360, y: 40, s: 30, w: 1, vx: 0, vy: 0, img: redFrogCanvas };
+        inventory.push(inventoryItemFrog);
+    }
+    for (i = 0; i < currentLevel.blueFrogCount; i++) {
+        var inventoryItemFrog = { id: "blueFrogIcon", type: "frog", x: 40, y: 120, s: 30, w: 1, vx: 0, vy: 0, img: blueFrogCanvas };
+        inventory.push(inventoryItemFrog);
+    }
 
 
-    if (currentLevel.greenFrogCount > 0) {
-        addIcon("greenFrogIcon", greenFrogCanvas, currentLevel.greenFrogCount);
-    }
-    if (currentLevel.yellowFrogCount > 0) {
-        addIcon("yellowFrogIcon", yellowFrogCanvas, currentLevel.yellowFrogCount);
-    }
-    if (currentLevel.redFrogCount > 0) {
-        addIcon("redFrogIcon", redFrogCanvas, currentLevel.redFrogCount);
-    }
-    if (currentLevel.blueFrogCount > 0) {
-        addIcon("blueFrogIcon", blueFrogCanvas, currentLevel.blueFrogCount);
-    }
-    if (currentLevel.logCount > 0) {
-        addIcon("logIcon", logCanvas, currentLevel.logCount);
-    }
+    //if (currentLevel.logCount > 0) {
+    //    var inventoryItemLog = { id: "logIcon", type: "frog", x: 40, y: 50, s: 30, w: 1, vx: 0, vy: 0, img: logCanvas };
+    //    inventory.push(inventoryItemLog);
+    //}
+    //if (currentLevel.greenFrogCount > 0) {
+    //    var inventoryItemFrog = { id: "greenFrogIcon", type: "frog", x: 120, y: 40, s: 30, w: 1, vx: 0, vy: 0, img: greenFrogCanvas };
+    //    inventory.push(inventoryItemFrog);
+    //}
+    //if (currentLevel.yellowFrogCount > 0) {
+    //    var inventoryItemFrog = { id: "yellowFrogIcon", type: "frog", x: 240, y: 40, s: 30, w: 1, vx: 0, vy: 0, img: yellowFrogCanvas };
+    //    inventory.push(inventoryItemFrog);
+    //}
+    //if (currentLevel.redFrogCount > 0) {
+    //    var inventoryItemFrog = { id: "redFrogIcon", type: "frog", x: 360, y: 40, s: 30, w: 1, vx: 0, vy: 0, img: redFrogCanvas };
+    //    inventory.push(inventoryItemFrog);
+    //}
+    //if (currentLevel.blueFrogCount > 0) {
+    //    var inventoryItemFrog = { id: "blueFrogIcon", type: "frog", x: 40, y:120, s: 30, w: 1, vx: 0, vy: 0, img: blueFrogCanvas };
+    //    inventory.push(inventoryItemFrog);
+    //}
+  
+
+    return;
+ 
+
+
 
 }
 function removeSunk() {
@@ -783,9 +792,11 @@ function draw() {
 
     // createWave(-waterWave);
     for (i in balls) {
-        ctx.drawImage(balls[i].img, balls[i].x - balls[i].s, balls[i].y - balls[i].s);
+        ctx.drawImage(balls[i].img, Math.floor(balls[i].x - balls[i].s),Math.floor( balls[i].y - balls[i].s));
     }
-
+    for (i in inventory) {
+        ctx.drawImage(inventory[i].img, Math.floor(inventory[i].x - inventory[i].s), Math.floor(inventory[i].y - inventory[i].s));
+    }
     ctx.drawImage(imgWater, waterWave - 100, 470);
 
 
