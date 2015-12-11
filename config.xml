@@ -116,4 +116,5 @@
   <plugin name="cordova-plugin-dialogs" spec="~1.2.0" />
   <preference name="Orientation" value="portrait" />
   <preference name="Fullscreen" value="True" />
+  <preference name="DisallowOverscroll" value="true" />
 </widget>
