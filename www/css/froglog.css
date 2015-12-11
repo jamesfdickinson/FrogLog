@@ -9,7 +9,7 @@
              }
 
              html, body {
- 
+				overflow:hidden; 
              }
 
              body, div {
@@ -63,6 +63,7 @@
                  xheight: 700px;
                  xmargin: 0px auto;
                  padding: 0 0 0 0;
+				 overflow:hidden; 
              }
 
              #gameCanvas {
