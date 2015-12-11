@@ -641,30 +641,39 @@ function addIcon(id, img, n) {
             dragId = event.currentTarget.id;
             click.x = event.clientX;
             click.y = event.clientY;
-            var element = document.getElementById("wraper");
-            click.scale = element.getBoundingClientRect().width / element.offsetWidth;
+            var element = document.getElementById("gameCanvas");
+            click.scale = element.clientWidth /  element.width;
         },
         drag: function (event, ui) {
-            // This is the parameter for scale()
-            var zoom = click.scale;
+            //// This is the parameter for scale()
+            //var zoom = click.scale;
 
-            var original = ui.originalPosition;
+            //var original = ui.originalPosition;
 
-            // jQuery will simply use the same object we alter here
-            ui.position = {
-                left: (event.clientX - click.x + original.left) / zoom,
-                top: (event.clientY - click.y + original.top) / zoom
-            };
+            //// jQuery will simply use the same object we alter here
+            //ui.position = {
+            //    left: (event.clientX - click.x + original.left) / zoom,
+            //    top: (event.clientY - click.y + original.top) / zoom
+            //};
            
         }
         ,
         stop: function (event, ui) {
-            //var id = e.dataTransfer.getData('Text');
+           
             var id = event.currentTarget.id;
             id = dragId;
-            var offset = $("#wraper").offset();
-            var element = document.getElementById("wraper");
+            var offset = $("#gameArea").offset();
+            var element = document.getElementById("gameArea");
             var element2 = document.getElementById("gameCanvas");
+
+            var x = ui.position.left / click.scale;
+            var y = ui.position.top / click.scale;
+            placeItem(id, x, y);
+            return;
+
+            var x = ui.position.left * click.scale;
+            var y = ui.position.top * click.scale;
+            placeItem(id, x, y);
 
             // var zoom = click.scale;
             // var original = ui.originalPosition;
@@ -677,7 +686,7 @@ function addIcon(id, img, n) {
             var y = ((event.clientY - offset.top) / click.scale) - (event.offsetY - 30);
 
             placeItem(id, x , y );
-            return;
+          return;
 
 
 
