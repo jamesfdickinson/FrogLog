@@ -713,23 +713,23 @@ function updateInventory() {
 
     inventory = [];
     for (i = 0; i < currentLevel.logCount; i++) {
-        var inventoryItemLog = { id: "logIcon", type: "frog", x: 40, y: 50, s: 30, w: 1, vx: 0, vy: 0, img: logCanvas };
+        var inventoryItemLog = { id: "logIcon", type: "frog", x: 40, y: 60, s: 30, w: 1, vx: 0, vy: 0, img: logCanvas };
         inventory.push(inventoryItemLog);
     }
     for (i = 0; i < currentLevel.greenFrogCount; i++) {
-        var inventoryItemFrog = { id: "greenFrogIcon", type: "frog", x: 120, y: 40, s: 30, w: 1, vx: 0, vy: 0, img: greenFrogCanvas };
+        var inventoryItemFrog = { id: "greenFrogIcon", type: "frog", x: 120, y: 50, s: 30, w: 1, vx: 0, vy: 0, img: greenFrogCanvas };
         inventory.push(inventoryItemFrog);
     }
     for (i = 0; i < currentLevel.yellowFrogCount; i++) {
-        var inventoryItemFrog = { id: "yellowFrogIcon", type: "frog", x: 240, y: 40, s: 30, w: 1, vx: 0, vy: 0, img: yellowFrogCanvas };
+        var inventoryItemFrog = { id: "yellowFrogIcon", type: "frog", x: 240, y: 50, s: 30, w: 1, vx: 0, vy: 0, img: yellowFrogCanvas };
         inventory.push(inventoryItemFrog);
     }
     for (i = 0; i < currentLevel.redFrogCount; i++) {
-        var inventoryItemFrog = { id: "redFrogIcon", type: "frog", x: 360, y: 40, s: 30, w: 1, vx: 0, vy: 0, img: redFrogCanvas };
+        var inventoryItemFrog = { id: "redFrogIcon", type: "frog", x: 360, y: 50, s: 30, w: 1, vx: 0, vy: 0, img: redFrogCanvas };
         inventory.push(inventoryItemFrog);
     }
     for (i = 0; i < currentLevel.blueFrogCount; i++) {
-        var inventoryItemFrog = { id: "blueFrogIcon", type: "frog", x: 40, y: 120, s: 30, w: 1, vx: 0, vy: 0, img: blueFrogCanvas };
+        var inventoryItemFrog = { id: "blueFrogIcon", type: "frog", x: 40, y: 130, s: 30, w: 1, vx: 0, vy: 0, img: blueFrogCanvas };
         inventory.push(inventoryItemFrog);
     }
 
