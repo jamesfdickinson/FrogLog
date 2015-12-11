@@ -94,7 +94,8 @@ function Level(st, r, gf, rf, bf, yf, log, music) {
         };
 }());
 var scale = 1;
-var offset = {left:0,top:0};
+var offset = { left: 0, top: 0 };
+var useTouch = false;
 function init() {
     currentLevelNumber = 0;
     dragIconsDiv = document.getElementById('dragicons');
@@ -122,6 +123,10 @@ function init() {
 
 
     $(document).bind('touchstart mousedown', function (e) {
+        //console.debug(e.type);
+        if (e.type == 'touchstart') useTouch = true;
+        if (e.type == 'mousedown' && useTouch == true) return;
+
         var canvas = document.getElementById("gameCanvas");
         scale = canvas.clientWidth / canvas.width;
         offset = $('#gameCanvas').offset();
