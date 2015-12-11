@@ -59,11 +59,11 @@
                  }
 
              #wraper {
-                 width: 480px;
-                 xheight: 700px;
-                 xmargin: 0px auto;
-                 padding: 0 0 0 0;
-				 overflow:hidden; 
+                   width: 480px;
+    height: 100%;
+    xmargin: 0px auto;
+    padding: 0 0 0 0;
+    position: absolute;
              }
 
              #gameCanvas {
