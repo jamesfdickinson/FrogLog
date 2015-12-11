@@ -60,10 +60,11 @@
 
              #wraper {
                    width: 480px;
-    height: 100%;
+    height: 700px;
     xmargin: 0px auto;
     padding: 0 0 0 0;
     position: absolute;
+	overflow:hidden; 
              }
 
              #gameCanvas {
