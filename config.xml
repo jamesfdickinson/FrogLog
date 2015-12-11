@@ -113,4 +113,6 @@
     </vs:platformSpecificWidget>
   </vs:platformSpecificValues>
   <plugin name="cordova-plugin-statusbar" version="2.0.0" />
+  <plugin name="cordova-plugin-inappbrowser" spec="~1.1.0" />
+  <plugin name="cordova-plugin-dialogs" spec="~1.2.0" />
 </widget>

@@ -84,26 +84,48 @@
             </div>
         </div>
         <img id="btnSound" src="images/Volume.png" />
-        <span id="fpscounter"></span>
+        <span id="fpscounter">  
+         <!--   <a id="rateLink" onclick="RateApp.rateGame();" >
+                    <img src="images/Buttons/white/favs.png" />
+            </a>-->
+        </span>
+      
     </div>
     <!--    </div>-->
      <script src="cordova.js"></script>
     <script src="scripts/platformOverrides.js"></script> 
     <script src="scripts/jquery-1.9.1.js"></script>
     <script src="scripts/jquery-ui.js"></script>
-    <script src="froglog.js" type="text/javascript"></script>
-    <script src="jquery.ui.touch-punch.min.js"></script>
+    <script src="scripts/froglog.js" ></script>
+    <script src="scripts/jquery.ui.touch-punch.min.js"></script>
+    <script src="scripts/Analytics.js"></script>
+    <script src="scripts/RateApp.js"></script>
+    <script src="scripts/AnalyticsGA.js"></script>
    <script>
        (function () {
     "use strict";
+
+    var version = "1.0.0.1";
+    Analytics.TrackStart("FrogLog", version);
+    AnalyticsGA.TrackStart("FrogLog", version,"UA-43146845-6");
+    AnalyticsGA.TrackPage("StartPage");
 
     document.addEventListener( 'deviceready', onDeviceReady.bind( this ), false );
 
         function onDeviceReady() {
             // Handle the Cordova pause and resume events
             document.addEventListener( 'pause', onPause.bind( this ), false );
-            document.addEventListener( 'resume', onResume.bind( this ), false );
-        
+            document.addEventListener('resume', onResume.bind(this), false);
+
+            if (typeof StatusBar != 'undefined') {
+                StatusBar.hide();
+            }
+            if (typeof navigator.notification != 'undefined') {
+                window.alert = navigator.notification.alert;
+            }
+            if (typeof cordova != 'undefined' && typeof cordova.InAppBrowser != 'undefined') {
+                window.open = cordova.InAppBrowser.open;
+            }
             // TODO: Cordova has been loaded. Perform any initialization that requires Cordova here.
         };
 
