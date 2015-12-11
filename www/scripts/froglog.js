@@ -94,7 +94,7 @@ function Level(st, r, gf, rf, bf, yf, log, music) {
         };
 }());
 var scale = 1;
-var offset = null;
+var offset = {left:0,top:0};
 function init() {
     currentLevelNumber = 0;
     dragIconsDiv = document.getElementById('dragicons');
@@ -434,7 +434,7 @@ function checkForEndLevel() {
         if (currentLevel.remaining() == 0) {
             //start timer
             
-            levelEndTimer = setTimeout(endLevel, 4000);
+            levelEndTimer = setTimeout(endLevel, 5000);
         }
     }
 }
@@ -795,7 +795,7 @@ function draw() {
         ctx.drawImage(balls[i].img, Math.floor(balls[i].x - balls[i].s),Math.floor( balls[i].y - balls[i].s));
     }
     for (i in inventory) {
-        ctx.drawImage(inventory[i].img, Math.floor(inventory[i].x - inventory[i].s), Math.floor(inventory[i].y - inventory[i].s));
+        ctx.drawImage(inventory[i].img, Math.floor(inventory[i].x - inventory[i].s) , Math.floor(inventory[i].y - inventory[i].s));
     }
     ctx.drawImage(imgWater, waterWave - 100, 470);
 

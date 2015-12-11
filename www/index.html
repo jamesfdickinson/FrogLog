@@ -126,12 +126,11 @@
      <script src="cordova.js"></script>
     <script src="scripts/platformOverrides.js"></script> 
     <script src="scripts/jquery-1.9.1.js"></script>
-    <script src="scripts/jquery-ui.js"></script>
     <script src="scripts/froglog.js" ></script>
-    <script src="scripts/jquery.ui.touch-punch.min.js"></script>
     <script src="scripts/Analytics.js"></script>
     <script src="scripts/RateApp.js"></script>
     <script src="scripts/AnalyticsGA.js"></script>
+    <script src="scripts/fastclick.js"></script>
    <script>
        (function () {
     "use strict";
@@ -140,6 +139,13 @@
     Analytics.TrackStart("FrogLog", version);
     AnalyticsGA.TrackStart("FrogLog", version,"UA-43146845-6");
     AnalyticsGA.TrackPage("StartPage");
+
+    //fastclick
+    if ('addEventListener' in document) {
+        document.addEventListener('DOMContentLoaded', function () {
+            FastClick.attach(document.body);
+        }, false);
+    }
 
     document.addEventListener( 'deviceready', onDeviceReady.bind( this ), false );
 
