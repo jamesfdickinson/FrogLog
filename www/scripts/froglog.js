@@ -203,7 +203,7 @@ function init() {
     // drawColorImage(greenFrogCanvas, imgFrogGreen, 0,0, 100,20,60);
     // imgFrogGreen.addEventListener('load', function () { changeColorImage(greenFrogCanvas, this, 100, 0, 0) }, false);
 
-
+    
     levels = new Array();
     levels.push(new Level("<h3>Level 1</h3><p>Hello Froggie!</p><p><small>Hint: Drag the log first</small></p>", 2, 2, 0, 0, 0, 1, "music/FrogBuzz.mp3"));
     levels.push(new Level("<h3>Level 2</h3><p>Make room for all!</p>", 12, 15, 0, 0, 0, 1, "music/facelines.mp3"));
