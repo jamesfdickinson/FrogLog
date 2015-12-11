@@ -11,57 +11,8 @@
     <link href="css/froglog.css" rel="stylesheet" />
     <script type="text/javascript">
 
-        function resize() {
-           
-            var wraper = document.getElementById("wraper");
-            var canvas = document.getElementById("gameCanvas");
-
-            var winheight = window.innerHeight;
-            var winWidth = window.innerWidth;
-
-            //var maxWidth = canvas.width;
-            //var maxHeight = canvas.height;
-            var maxWidth = 480;
-            var maxHeight = 700;
-
-
-            var scale = Math.min(winWidth / maxWidth, winheight / maxHeight);
-
-            //http://stackoverflow.com/questions/18750769/scale-div-with-its-content-to-fit-window
-
-            //var ratio = canvas.width / canvas.height;
-            //var width = winheight * ratio;
-            //var scaleWidth = width / canvas.width;
-
-            //var ratio = canvas.height /canvas.width ;
-            //var height = winheight * ratio;
-            //var scaleHeight = height / canvas.height;
-
-            //var scale = scaleWidth;
-
-            wraper.style.transform = 'translate(' + ((winWidth / 2) - (maxWidth / 2)) + 'px, 0px) scale(' + scale + ')';
-            wraper.style.transformOrigin = 'center top';
-
-
-
-           // wraper.style.transform-origin = 'left top'; 
-           
-
-           // canvas = document.getElementById("gameCanvas");
-           // // Our canvas must cover full height of screen
-           // // regardless of the resolution
-           //var height = window.innerHeight;
-
-           // //// So we need to calculate the proper scaled width
-           // //// that should work well with every resolution
-           // var ratio = canvas.width / canvas.height;
-           // var width = height * ratio;
-
-           // canvas.style.width = width + 'px';
-           // canvas.style.height = height + 'px';
-        }
-
         function resizeGame() {
+            //http://www.html5rocks.com/en/tutorials/casestudies/gopherwoord-studios-resizing-html5-games/
             var gameArea = document.getElementById('gameArea');
             var widthToHeight = 480 / 700;
             var newWidth = window.innerWidth;
@@ -85,12 +36,6 @@
             gameCanvas.style.width = newWidth + 'px';;
             gameCanvas.style.height = newHeight + 'px';;
 
-
-         //   var gameCanvas = document.getElementById("gameCanvas");
-         //   var scale = gameCanvas.clientWidth / gameCanvas.width;
-         //   var dragicons = document.getElementById("dragicons");
-          //  dragicons.style.transform =  'scale(' + scale + ')';
-          //  dragicons.style.transformOrigin = 'center top';
         }
 
     </script>
@@ -130,7 +75,7 @@
     <script src="scripts/Analytics.js"></script>
     <script src="scripts/RateApp.js"></script>
     <script src="scripts/AnalyticsGA.js"></script>
-    <script src="scripts/fastclick.js"></script>
+
    <script>
        (function () {
     "use strict";
@@ -140,12 +85,7 @@
     AnalyticsGA.TrackStart("FrogLog", version,"UA-43146845-6");
     AnalyticsGA.TrackPage("StartPage");
 
-    //fastclick
-    if ('addEventListener' in document) {
-        document.addEventListener('DOMContentLoaded', function () {
-            FastClick.attach(document.body);
-        }, false);
-    }
+
 
     document.addEventListener( 'deviceready', onDeviceReady.bind( this ), false );
 

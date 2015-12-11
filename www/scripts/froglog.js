@@ -8,7 +8,7 @@ var currentLevel = new Level();
 var waterWave = 0;
 var waterWaveD = 1;
 var setIntervalId;
-
+var nextClickEvent = null;
 var currentLevelNumber = 0;
 var imgLog = new Image();
 imgLog.src = 'images/log.png';
@@ -155,7 +155,11 @@ function init() {
         }
         if (selectedIcon != null) {
         }
-
+        if (nextClickEvent != null) {
+            var clickEvent = nextClickEvent;
+            nextClickEvent = null;
+            clickEvent();
+        }
         
     });
     $(document).bind('touchmove mousemove', function (e) {
@@ -207,7 +211,7 @@ function init() {
     levels = new Array();
     levels.push(new Level("<h3>Level 1</h3><p>Hello Froggie!</p><p><small>Hint: Drag the log first</small></p>", 2, 2, 0, 0, 0, 1, "music/FrogBuzz.mp3"));
     levels.push(new Level("<h3>Level 2</h3><p>Make room for all!</p>", 12, 15, 0, 0, 0, 1, "music/facelines.mp3"));
-    levels.push(new Level("<h3>Level 3</h3><p>Big Blue</p><p><small>Hint: Blue frogs are heavy</small></p>", 5, 4, 0, 2, 0, 1, "music/FrogBuzz.mp3"));
+    levels.push(new Level("<h3>Level 3</h3><p>Big Blue</p><p><small>Hint: Blue frogs are heavy</small></p>", 6, 4, 0, 2, 0, 1, "music/FrogBuzz.mp3"));
     levels.push(new Level("<h3>Level 4</h3><p>Ninja Pop Corn!</p><p><small>Hint: You will see why</small></p>", 7, 0, 9, 0, 0, 1, "music/facelines.mp3"));
     levels.push(new Level("<h3>Level 5</h3><p>Logs!</p><p><small>Hint: Try making a frog sandwitch</small></p>", 14, 15, 0, 1, 0, 4, "music/FrogBuzz.mp3"));
     levels.push(new Level("<h3>Level 6</h3><p>Meet Sticky!</p><p><small>Hint: Other frogs and even logs will stick to the yellow frog</small></p>", 27, 25, 0, 0, 4, 2, "music/facelines.mp3"));
@@ -469,10 +473,10 @@ function showMessage(msg, callback) {
 
     document.getElementById('msgModelMessage').innerHTML = msg;
     document.getElementById('msgModelWindow').style.display = 'block';
-    document.getElementById('msgModelWindow').onmousedown = function () {
-            callback();
-    };
-    
+    //document.getElementById('msgModelWindow').onclick = function () {
+    //        callback();
+    //};
+    nextClickEvent = callback;
 }
 
 
