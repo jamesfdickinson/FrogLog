@@ -1,11 +1,11 @@
 {
      "android": {
-         "release": {
-             "keystore": "",
-             "storePassword": "",
-             "alias": "",
-             "password" : "",
-             "keystoreType": ""
-         }
+        "release": {
+		"keystore":"F:\Users\Jimmy\Documents\Programming\FrogLog\Keys\Jimmy_RELEASE_KEY.keystore",
+		"storePassword":"Lisaisrad1",
+		"alias":"speed",
+		"password":"Lisaisrad1",
+		"keystoreType":"",
+       }
      }
  }
